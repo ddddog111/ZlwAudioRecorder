@@ -29,12 +29,19 @@ public class RecordConfig implements Serializable {
      */
     private int sampleRate = 16000;
 
+    private String recordFileName;
+
     /*
-        * 录音文件存放路径，默认sdcard/Record
+     * 录音文件存放路径，默认sdcard/Record
      */
     private String recordDir = String.format(Locale.getDefault(),
             "%s/Record/",
             Environment.getExternalStorageDirectory().getAbsolutePath());
+
+    /**
+     * pcm文件存放位置
+     */
+    private String tempFileDir = String.format("%s/Record/temp/", Environment.getExternalStorageDirectory().getAbsolutePath());
 
     public RecordConfig() {
     }
@@ -75,7 +82,7 @@ public class RecordConfig implements Serializable {
      * @return 采样位宽 0: error
      */
     public int getEncoding() {
-        if(format == RecordFormat.MP3){//mp3后期转换
+        if (format == RecordFormat.MP3) {//mp3后期转换
             return 16;
         }
 
@@ -139,7 +146,7 @@ public class RecordConfig implements Serializable {
     }
 
     public int getEncodingConfig() {
-        if(format == RecordFormat.MP3){//mp3后期转换
+        if (format == RecordFormat.MP3) {//mp3后期转换
             return AudioFormat.ENCODING_PCM_16BIT;
         }
         return encodingConfig;
@@ -159,10 +166,27 @@ public class RecordConfig implements Serializable {
         return this;
     }
 
+    public RecordConfig setTempFileDir(String path) {
+        this.tempFileDir = path;
+        return this;
+    }
+
+    public String getTempFileDir() {
+        return this.tempFileDir;
+    }
+
 
     @Override
     public String toString() {
         return String.format(Locale.getDefault(), "录制格式： %s,采样率：%sHz,位宽：%s bit,声道数：%s", format, sampleRate, getEncoding(), getChannelCount());
+    }
+
+    public String getRecordFileName() {
+        return recordFileName;
+    }
+
+    public void setRecordFileName(String recordFileName) {
+        this.recordFileName = recordFileName;
     }
 
     public enum RecordFormat {
